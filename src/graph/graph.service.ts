@@ -13,16 +13,17 @@ export class GraphService {
 
   async execute(
     chainId: number,
+    version: string,
     request: { query: string; variables?: any },
   ): Promise<any> {
-    const key = this.generateKey(chainId, request.query);
+    const key = this.generateKey(chainId, version, request.query);
     const cacheResponse = this.cacheService.get(key);
 
     if (cacheResponse) {
       return cacheResponse;
     }
 
-    const link = this.networkUtils.getLinkByChainId(chainId);
+    const link = `${this.networkUtils.getLinkByChainId(chainId)}/${version}`;
     const response = await this.executeWithRetry(link, request, 3);
     const ttl = this.cacheService.generateExpirationTime(request.query) || 3600; // Default TTL: 1 hour
     this.cacheService.set(key, response, ttl);
@@ -74,8 +75,8 @@ export class GraphService {
     }
   }
 
-  private generateKey(chainId: number, query: string): string {
-    const key = `${chainId}-${query}`;
+  private generateKey(chainId: number, version: string, query: string): string {
+    const key = `${chainId}-${version}-${query}`;
     return crypto.createHash('sha256').update(key).digest('hex');
   }
 }

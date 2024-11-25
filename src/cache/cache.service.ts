@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-const DEFAULT_TTL = 10 * 60 * 60 * 1000; // 10 hours
+const DEFAULT_TTL = 5 * 60 * 60 * 1000; // 5 hours
 const SHORT_TTL = 10 * 60 * 1000; // 10 min
 
 @Injectable()

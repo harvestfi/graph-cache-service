@@ -5,12 +5,18 @@ import { GraphService } from './graph.service';
 export class GraphController {
   constructor(private readonly graphService: GraphService) {}
 
-  @Post(':chainId')
+  @Post(':chainId/:version?')
   @HttpCode(200)
   async setCache(
     @Param('chainId') chainId: string,
     @Body() body: any,
+    @Param('version') version?: string,
   ): Promise<string> {
-    return await this.graphService.execute(parseInt(chainId), body);
+    const resolvedVersion = version || 'version/latest';
+    return await this.graphService.execute(
+      parseInt(chainId),
+      resolvedVersion,
+      body,
+    );
   }
 }
