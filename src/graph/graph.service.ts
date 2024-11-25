@@ -68,7 +68,7 @@ export class GraphService {
         );
       }
 
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw new Error(`Failed to execute GraphQL query: ${error.message}`);
     }
