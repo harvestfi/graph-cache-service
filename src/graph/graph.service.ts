@@ -25,7 +25,7 @@ export class GraphService {
 
     const link = `${this.networkUtils.getLinkByChainId(chainId)}/${version}`;
     const response = await this.executeWithRetry(link, request, 3);
-    const ttl = this.cacheService.generateExpirationTime(request.query) || 3600; // Default TTL: 1 hour
+    const ttl = this.cacheService.generateExpirationTime();
     this.cacheService.set(key, response, ttl);
 
     return response;
@@ -35,7 +35,7 @@ export class GraphService {
     link: string,
     request: { query: string; variables?: any },
     retryLimit: number,
-    delay: number = 1000,
+    delay: number = 30000,
   ): Promise<any> {
     let attempts = 0;
     while (attempts < retryLimit) {
