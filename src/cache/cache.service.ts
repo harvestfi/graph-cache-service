@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
-const DEFAULT_TTL = 5 * 60 * 60 * 1000; // 5 hours
-const SHORT_TTL = 10 * 60 * 1000; // 10 min
+const DEFAULT_TTL = 10 * 60 * 1000; // 10 min
 
 @Injectable()
 export class CacheService {
   private cache = new Map<string, { value: string; expiresAt: number }>();
+
+  constructor(private configService: ConfigService) {}
 
   set(key: string, value: string, ttl: number) {
     const expiresAt = Date.now() + ttl;
@@ -24,10 +26,7 @@ export class CacheService {
     return item.value;
   }
 
-  generateExpirationTime(request: string): number {
-    if (request.includes('userBalanceHistories')) {
-      return SHORT_TTL;
-    }
-    return SHORT_TTL;
+  generateExpirationTime(): number {
+    return this.configService.get<number>('CACHE_TTL') || DEFAULT_TTL;
   }
 }
