@@ -16,7 +16,6 @@ export class GraphService {
     version: string,
     request: { query: string; variables?: any },
   ): Promise<any> {
-    console.log(JSON.stringify(request));
     const key = this.generateKey(chainId, version, JSON.stringify(request));
     const cacheResponse = this.cacheService.get(key);
 

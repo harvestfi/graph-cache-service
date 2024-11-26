@@ -28,6 +28,6 @@ export class CacheService {
     if (request.includes('userBalanceHistories')) {
       return SHORT_TTL;
     }
-    return DEFAULT_TTL;
+    return SHORT_TTL;
   }
 }
